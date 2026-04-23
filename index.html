@@ -1,1 +1,808 @@
-TEST
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa Municipal — Jundiaí SP</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root { --azul: #0D3B6E; --azul-med: #1B5FA8; --azul-light: #E6F1FB; --verde: #0E7C4A; --verde-l: #D4F0E3; --laranja: #E06320; --laranja-l: #FFF0E6; --vermelho: #C0392B; --vermelho-l: #FDECEA; --cinza-f: #F4F6FA; --cinza-b: #E2E8F0; --cinza-t: #64748B; --texto: #1A2332; --branco: #FFFFFF; --sombra: 0 4px 24px rgba(13,59,110,0.10); --raio: 16px; --raio-sm: 10px; --fonte-h: 'Sora',sans-serif; --fonte-b: 'DM Sans',sans-serif; }
+* { margin: 0px; padding: 0px; box-sizing: border-box; }
+body { font-family: var(--fonte-b); background: rgb(244, 247, 252); color: var(--texto); min-height: 100vh; }
+body::before { content: ""; position: fixed; top: -120px; right: -120px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(27, 95, 168, 0.12) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+.header { position: fixed; top: 0px; left: 0px; right: 0px; background: var(--azul); z-index: 100; padding: 0px 24px; }
+.header-inner { max-width: 720px; margin: 0px auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.header-title { font-family: var(--fonte-h); font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.9); letter-spacing: 0.5px; }
+.header-prog { font-family: var(--fonte-h); font-size: 12px; color: rgba(255, 255, 255, 0.65); }
+.barra-wrap { position: fixed; top: 56px; left: 0px; right: 0px; height: 4px; background: rgba(255, 255, 255, 0.15); z-index: 100; }
+.barra-fill { height: 100%; background: linear-gradient(90deg, rgb(91, 184, 255), rgb(56, 232, 181)); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
+.container { max-width: 720px; margin: 0px auto; padding: 80px 20px 100px; position: relative; z-index: 1; }
+.capa { text-align: center; padding: 40px 0px 20px; }
+.capa-badge { display: inline-block; background: var(--azul-light); color: var(--azul-med); font-family: var(--fonte-h); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 24px; }
+.capa h1 { font-family: var(--fonte-h); font-size: 32px; font-weight: 700; color: var(--azul); line-height: 1.2; margin-bottom: 12px; }
+.capa p { font-size: 16px; color: var(--cinza-t); line-height: 1.7; max-width: 500px; margin: 0px auto 32px; }
+.chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.chip { display: flex; align-items: center; gap: 6px; background: var(--branco); border: 1px solid var(--cinza-b); border-radius: 100px; padding: 6px 14px; font-size: 13px; color: var(--cinza-t); }
+.info-box { background: var(--azul-light); border-radius: var(--raio); padding: 20px 24px; text-align: left; border-left: 4px solid var(--azul-med); }
+.info-box p { font-size: 13px; color: var(--azul); line-height: 1.7; margin: 0px; }
+.bloco-card { background: var(--branco); border-radius: var(--raio); box-shadow: var(--sombra); overflow: hidden; margin-bottom: 16px; animation: 0.4s ease 0s 1 normal both running slideUp; }
+@keyframes slideUp { 
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+.bloco-header { background: var(--azul); padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+.bloco-letra { width: 32px; height: 32px; background: rgba(255, 255, 255, 0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--fonte-h); font-size: 14px; font-weight: 700; color: white; flex-shrink: 0; }
+.bloco-titulo { font-family: var(--fonte-h); font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, 0.95); }
+.bloco-body { padding: 24px; }
+.pq-wrap { margin-bottom: 28px; }
+.pq-wrap:last-child { margin-bottom: 0px; }
+.pq-num { font-family: var(--fonte-h); font-size: 10px; font-weight: 700; color: var(--azul-med); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+.pq-txt { font-family: var(--fonte-h); font-size: 16px; font-weight: 600; color: var(--texto); line-height: 1.45; margin-bottom: 4px; }
+.pq-dica { font-size: 13px; color: var(--cinza-t); margin-bottom: 14px; line-height: 1.5; }
+.opcoes { display: flex; flex-direction: column; gap: 8px; }
+.opcao { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border: 1.5px solid var(--cinza-b); border-radius: var(--raio-sm); cursor: pointer; transition: 0.18s; background: var(--cinza-f); user-select: none; }
+.opcao:hover { border-color: var(--azul-med); background: var(--azul-light); }
+.opcao.sel { border-color: var(--azul-med); background: var(--azul-light); box-shadow: rgba(27, 95, 168, 0.12) 0px 0px 0px 3px; }
+.radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--cinza-b); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: 0.18s; }
+.opcao.sel .radio { border-color: var(--azul-med); background: var(--azul-med); }
+.opcao.sel .radio::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: white; }
+.opcao-txt { font-size: 14px; color: var(--texto); line-height: 1.4; }
+.opcao.sel .opcao-txt { color: var(--azul); font-weight: 500; }
+.ac-wrap { position: relative; }
+.campo { width: 100%; padding: 14px 16px; border: 1.5px solid var(--cinza-b); border-radius: var(--raio-sm); font-family: var(--fonte-b); font-size: 14px; color: var(--texto); background: var(--cinza-f); transition: border-color 0.18s; outline: none; }
+.campo:focus { border-color: var(--azul-med); background: var(--branco); }
+.campo::placeholder { color: rgb(176, 190, 197); }
+.campo.ok { border-color: var(--verde); background: var(--verde-l); }
+.campo.err { border-color: var(--vermelho); background: var(--vermelho-l); }
+.ac-lista { position: absolute; top: calc(100% + 4px); left: 0px; right: 0px; background: var(--branco); border: 1.5px solid var(--azul-med); border-radius: var(--raio-sm); box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px; z-index: 200; max-height: 220px; overflow-y: auto; display: none; }
+.ac-lista.open { display: block; animation: 0.15s ease 0s 1 normal none running slideUp; }
+.ac-item { padding: 12px 16px; cursor: pointer; font-size: 14px; color: var(--texto); border-bottom: 1px solid var(--cinza-f); transition: background 0.12s; display: flex; align-items: center; gap: 8px; }
+.ac-item:last-child { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+.ac-item:hover, .ac-item.ativo { background: var(--azul-light); color: var(--azul); }
+.ac-item em { font-style: normal; font-weight: 700; color: var(--azul-med); }
+.bairro-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--verde-l); border: 1px solid var(--verde); color: var(--verde); border-radius: 100px; padding: 5px 12px; font-size: 13px; font-weight: 500; margin-top: 8px; }
+.bairro-badge button { background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; cursor: pointer; color: var(--verde); font-size: 18px; line-height: 1; padding: 0px 0px 0px 4px; }
+.ac-hint { font-size: 12px; color: var(--cinza-t); margin-top: 6px; }
+.geo-status { font-size: 12px; margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.geo-spin { width: 12px; height: 12px; border-top-style: ; border-top-width: ; border-right-color: ; border-right-style: ; border-right-width: ; border-bottom-color: ; border-bottom-style: ; border-bottom-width: ; border-left-color: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; border-top-color: var(--azul-med); border-radius: 50%; animation: 0.7s linear 0s infinite normal none running spin360; }
+@keyframes spin360 { 
+  100% { transform: rotate(360deg); }
+}
+.geo-ok { color: var(--verde); font-weight: 500; }
+.geo-err { color: var(--vermelho); }
+.escala { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.en { flex: 1 1 0%; min-width: 36px; height: 48px; border: 1.5px solid var(--cinza-b); border-radius: 8px; background: var(--cinza-f); display: flex; align-items: center; justify-content: center; font-family: var(--fonte-h); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.15s; color: var(--cinza-t); }
+.en:hover { border-color: var(--azul-med); background: var(--azul-light); color: var(--azul); }
+.en.sel { background: var(--azul-med); border-color: var(--azul-med); color: white; transform: scale(1.06); }
+.en[data-v="0"] { color: var(--vermelho); }
+.en[data-v="10"] { color: var(--verde); }
+.en[data-v="0"].sel, .en[data-v="10"].sel { color: white; }
+.escala-labs { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--cinza-t); }
+.lk-wrap { overflow-x: auto; margin-top: 8px; }
+.lk-table { width: 100%; border-collapse: collapse; min-width: 480px; }
+.lk-table th { font-family: var(--fonte-h); font-size: 11px; font-weight: 600; color: var(--azul); text-align: center; padding: 8px 4px; border-bottom: 2px solid var(--cinza-b); }
+.lk-table th:first-child { text-align: left; padding-left: 8px; }
+.lk-table td { padding: 10px 4px; text-align: center; border-bottom: 1px solid var(--cinza-b); font-size: 13px; transition: background 0.15s; }
+.lk-table td:first-child { text-align: left; padding-left: 8px; font-size: 13px; font-weight: 500; }
+.lk-table tr:last-child td { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+.lk-table tr:nth-child(2n) td { background: var(--cinza-f); }
+.lk-table tr:hover td { background: var(--azul-light); }
+.lk-r { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--cinza-b); margin: 0px auto; cursor: pointer; transition: 0.15s; display: flex; align-items: center; justify-content: center; }
+.lk-r:hover { border-color: var(--azul-med); }
+.lk-r.on { border-color: var(--azul-med); background: var(--azul-med); }
+.lk-r.on::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: white; }
+.prio-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.prio-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1.5px solid var(--cinza-b); border-radius: var(--raio-sm); background: var(--cinza-f); cursor: grab; transition: 0.18s; user-select: none; }
+.prio-item:hover { border-color: var(--azul-med); background: var(--azul-light); }
+.prio-item.dragging { opacity: 0.5; cursor: grabbing; }
+.prio-item.drag-over { border-color: var(--azul-med); background: var(--azul-light); transform: scale(1.01); }
+.prio-rank { width: 26px; height: 26px; border-radius: 6px; background: var(--azul-med); color: white; font-family: var(--fonte-h); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.prio-nome { font-size: 14px; font-weight: 500; flex: 1 1 0%; }
+.prio-drag { color: var(--cinza-b); font-size: 16px; }
+.campo-area { width: 100%; padding: 14px 16px; border: 1.5px solid var(--cinza-b); border-radius: var(--raio-sm); font-family: var(--fonte-b); font-size: 14px; color: var(--texto); background: var(--cinza-f); resize: vertical; min-height: 100px; outline: none; transition: border-color 0.18s; }
+.campo-area:focus { border-color: var(--azul-med); background: var(--branco); }
+.cnt { font-size: 11px; color: var(--cinza-b); text-align: right; margin-top: 4px; }
+.nota-rot { background: var(--laranja-l); border-left: 3px solid var(--laranja); border-radius: 0px 8px 8px 0px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: var(--laranja); font-weight: 500; }
+.divider { height: 1px; background: var(--cinza-b); margin: 24px 0px; }
+.af-badge { background: var(--cinza-f); border: 1px solid var(--cinza-b); border-radius: var(--raio-sm); padding: 10px 14px; margin-top: 16px; font-size: 12px; color: var(--cinza-t); line-height: 1.6; }
+.af-badge strong { color: var(--texto); font-weight: 600; }
+.nav-btns { display: flex; gap: 12px; margin-top: 24px; }
+.btn-back { flex: 0 0 auto; padding: 14px 20px; border: 1.5px solid var(--cinza-b); border-radius: var(--raio-sm); background: none; cursor: pointer; font-family: var(--fonte-b); font-size: 14px; color: var(--cinza-t); transition: 0.18s; }
+.btn-back:hover { border-color: var(--azul-med); color: var(--azul); }
+.btn-next { flex: 1 1 0%; padding: 16px; border: none; border-radius: var(--raio-sm); background: var(--azul-med); color: white; font-family: var(--fonte-h); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.18s; }
+.btn-next:hover { background: var(--azul); transform: translateY(-1px); }
+.btn-next:disabled { background: var(--cinza-b); cursor: default; transform: none; }
+.btn-exp { display: block; width: 100%; padding: 16px; border: none; border-radius: var(--raio-sm); background: var(--azul-med); color: white; font-family: var(--fonte-h); font-size: 15px; font-weight: 600; cursor: pointer;transition: 0.18s; }
+.btn-exp:hover { background: var(--azul); transform: translateY(-1px); }
+.hidden { display: none !important; }
+.tela { animation: 0.35s ease 0s 1 normal both running fadeIn; }
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+.fim-card { background: var(--branco); border-radius: var(--raio); box-shadow: var(--sombra); padding: 40px 32px; text-align: center; }
+.fim-icon { font-size: 56px; margin-bottom: 16px; }
+.fim-card h2 { font-family: var(--fonte-h); font-size: 24px; font-weight: 700; color: var(--azul); margin-bottom: 8px; }
+.fim-card p { font-size: 15px; color: var(--cinza-t); line-height: 1.7; margin-bottom: 20px; }
+.modal-overlay { position: fixed; inset: 0px; background: rgba(10, 20, 40, 0.6); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; animation: 0.2s ease 0s 1 normal both running fadeIn; }
+.modal-box { background: var(--branco); border-radius: var(--raio) var(--raio) 0px 0px; width: 100%; max-width: 480px; padding: 24px; max-height: 80vh; overflow-y: auto; }
+.modal-title { font-family: var(--fonte-h); font-size: 16px; font-weight: 700; color: var(--azul); margin-bottom: 16px; }
+.modal-busca { width: 100%; padding: 12px 14px; border: 1.5px solid rgb(226, 232, 240); border-radius: var(--raio-sm); font-size: 14px; outline: none; margin-bottom: 12px;px; }
+.modal-busca:focus { border-color: rgb(24, 95, 165); }
+.modal-lista-bairros { max-height: 180px; overflow-y: auto; border: 1px solid rgb(226, 232, 240); border-radius: 8px; }
+.modal-bairro-item { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid rgb(244, 247, 252); transition: background 0.15s; color: rgb(4, 44, 83); }
+.modal-bairro-item:last-child { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+.modal-bairro-item:hover { background: rgb(230, 241, 251); }
+
+/* ── NOVA TELA A: LOCAL DE VOTAÇÃO ── */
+.escola-input-wrap{position:relative;margin:12px 0;}
+.escola-input{width:100%;padding:14px 16px;font-size:16px;font-family:var(--fonte-b);border:2px solid var(--cinza-b);border-radius:var(--raio-sm);background:#fff;color:var(--texto);outline:none;transition:border-color .2s;}
+.escola-input:focus{border-color:var(--azul-med);}
+.escola-input.ok{border-color:var(--verde);background:var(--verde-l);}
+.escola-resultados{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--cinza-b);border-radius:var(--raio-sm);max-height:300px;overflow-y:auto;box-shadow:var(--sombra);z-index:200;}
+.esc-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--cinza-f);transition:background .12s;}
+.esc-item:hover{background:var(--azul-light);}
+.esc-item:last-child{border-bottom:none;}
+.esc-item-nome{font-size:14px;font-weight:600;color:var(--azul);}
+.esc-item-bairro{font-size:12px;color:var(--cinza-t);margin-top:2px;}
+.esc-item-apt{font-size:11px;color:var(--verde);}
+.esc-selecionada{background:var(--azul-light);border:2px solid var(--azul-med);border-radius:var(--raio-sm);padding:14px 16px;margin-top:10px;}
+.esc-sel-nome{font-size:14px;font-weight:700;color:var(--azul);}
+.esc-sel-bairro{font-size:12px;color:var(--cinza-t);margin-top:3px;}
+.esc-sel-apt{font-size:11px;color:var(--verde);margin-top:2px;}
+.btn-trocar-esc{margin-top:8px;background:none;border:1px solid var(--azul-med);color:var(--azul-med);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--fonte-b);}
+.esc-vazio{padding:16px;font-size:13px;color:var(--cinza-t);text-align:center;}
+.ver-todas{text-align:center;margin-top:10px;font-size:13px;}
+.ver-todas a{color:var(--azul-med);text-decoration:underline;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <svg width="28" height="28" viewBox="0 0 44 44" fill="none">
+      <rect width="44" height="44" rx="9" fill="#378ADD"/>
+      <rect x="7" y="22" width="7" height="15" rx="2" fill="#fff"/>
+      <rect x="18" y="16" width="7" height="21" rx="2" fill="rgba(255,255,255,0.7)"/>
+      <rect x="29" y="9" width="7" height="28" rx="2" fill="rgba(255,255,255,0.4)"/>
+      <circle cx="10.5" cy="18" r="2" fill="#fff"/>
+      <circle cx="21.5" cy="12" r="2" fill="rgba(255,255,255,0.7)"/>
+      <line x1="10.5" y1="18" x2="21.5" y2="12" stroke="#fff" stroke-width="1.2" stroke-dasharray="2.5 2"/>
+    </svg>
+    <span class="header-titulo">Pesquisa Municipal — Jundiaí SP</span>
+    <div class="header-badge">🔒 100% anônimo</div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <span class="prog-txt" id="prog-txt">Início</span>
+    <div class="barra-wrap"><div class="barra" id="barra"></div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="app"></div>
+  <div class="btn-area" id="btn-area" style="display:none">
+    <button class="btn btn-v" id="btn-v" onclick="voltar()">← Voltar</button>
+    <button class="btn btn-a" id="btn-a" onclick="avancar()">Continuar →</button>
+  </div>
+</div>
+
+<div id="modal-bairro-overlay" style="display:none">
+  <div class="modal-bairro">
+    <div class="modal-titulo">Confirmar escola de votação</div>
+    <div class="modal-nome" id="modal-nome-bairro"></div>
+    <div class="modal-btns">
+      <button id="btn-modal-confirmar" onclick="_confirmarBairro()">✓ Confirmar</button>
+      <button id="btn-modal-corrigir" onclick="_abrirListaBairros()">Trocar</button>
+    </div>
+    <div id="modal-lista-wrap" style="display:none">
+      <input id="modal-busca" class="modal-busca" placeholder="Buscar escola...">
+      <div id="modal-lista-bairros"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbzi9ukAD9XoHvcxUpZ-kCNONVuh2bkThO02b5BNUKrxnCapsXE0g8FjUlGtAWI4KbfQ/exec';
+
+const ESCOLAS_VOTACAO=[
+{i:0,n:"EMEB Prof.ª Anna Pontes Chagas",b:"Jardim das Samambaias",lat:-23.1897971,lng:-46.9150478,apt:3195},
+{i:1,n:"EE Prof. Albino Melo de Oliveira",b:"Engordadouro",lat:-23.1451436,lng:-46.9376991,apt:2478},
+{i:2,n:"EMEB Prof.º Pedro Clarismundo Fornari",b:"Rio Acima",lat:-23.11018,lng:-46.8869716,apt:3557},
+{i:3,n:"EE Dr. Antenor Soares Gandra",b:"Centro",lat:-23.1936932,lng:-46.8810617,apt:1818},
+{i:4,n:"EE Dom Joaquim Justino Carreira",b:"Parque Almerinda P. Chaves",lat:-23.1443806,lng:-46.9889875,apt:4142},
+{i:5,n:"Colégio Divino Salvador",b:"Vila Arens II",lat:-23.1984675,lng:-46.8750381,apt:8995},
+{i:6,n:"EE Prof. José Feliciano de Oliveira",b:"Jardim Tamoio",lat:-23.191572,lng:-46.8561443,apt:5543},
+{i:7,n:"EE Barão de Jundiaí",b:"Jd. Sagrado Coração de Jesus",lat:-23.1819366,lng:-46.8491893,apt:5556},
+{i:8,n:"EMEB Prof.ª Beatriz Blattner Pupo",b:"Jardim Novo Horizonte",lat:-23.14255761,lng:-46.98502391,apt:3157},
+{i:9,n:"EE Prof.ª Ana Pinto Duarte Paes",b:"Ponte São João",lat:-23.1790512,lng:-46.8776394,apt:4949},
+{i:10,n:"EMEB Prof.ª Armanda Santina Polenti",b:"Parque São Luiz",lat:-23.1489763,lng:-46.8719605,apt:3248},
+{i:11,n:"EE Prof.ª Maria José Maia de Toledo",b:"Jardim São Camilo Novo",lat:-23.1767925,lng:-46.8670828,apt:4779},
+{i:12,n:"EE Bispo Dom Gabriel Paulino Bueno Couto",b:"Vila Virgínia",lat:-23.187745,lng:-46.8951884,apt:5865},
+{i:13,n:"EE Prof.º João Batista Curado",b:"Jardim Tarumã",lat:-23.1723772,lng:-46.8701204,apt:5260},
+{i:14,n:"EE Rafael de Oliveira",b:"Chácara Planalto",lat:-23.187814,lng:-46.98691,apt:3746},
+{i:15,n:"EE Prof. Adoniro Ladeira",b:"Jardim Shangai",lat:-23.1725074,lng:-46.9134584,apt:5240},
+{i:16,n:"EE Prof.ª Cecília Rolemberg Porto Guelli",b:"Vila Rio Branco",lat:-23.1746221,lng:-46.887384,apt:5698},
+{i:17,n:"EE Prof.ª Albertina Fortarel",b:"Jardim Ermida II",lat:-23.1873609,lng:-46.9627544,apt:5201},
+{i:18,n:"EE Prof.ª Benedita Arruda",b:"Vila Didi",lat:-23.2111494,lng:-46.857273,apt:6348},
+{i:19,n:"EMEB Prof.ª Marina de Almeida Rinaldi Carvalho",b:"Tulipas",lat:-23.1536997,lng:-46.9628175,apt:4176},
+{i:20,n:"EMEB Anézio de Oliveira",b:"Vila Marlene",lat:-23.1570294,lng:-46.9190886,apt:2825},
+{i:21,n:"EMEB Glória da Silva Rocha Genovese",b:"Vila Cristo Redentor",lat:-23.2056921,lng:-46.8541377,apt:1967},
+{i:22,n:"EE Padre Maurílio Tomanik",b:"Cecap",lat:-23.1444185,lng:-46.915965,apt:3825},
+{i:23,n:"EMEB Pedro de Oliveira",b:"Vila Joana",lat:-23.1829126,lng:-46.8748205,apt:4793},
+{i:24,n:"EE Maria de Almeida Schledorn",b:"Tulipas",lat:-23.1533582,lng:-46.9634439,apt:4251},
+{i:25,n:"SESI Luiz Latorre",b:"Vila Bandeirantes",lat:-23.1676935,lng:-46.9032473,apt:7677},
+{i:26,n:"EMEB Ivo de Bona",b:"Parque Almerinda P. Chaves",lat:-23.1466949,lng:-46.9981522,apt:4911},
+{i:27,n:"EMEB Prof.ª Geralda Berthola Facca",b:"Jardim do Lago",lat:-23.2179158,lng:-46.8620878,apt:5149},
+{i:28,n:"EMEB Prof. João Fernandes Neto",b:"Jardim São Vicente",lat:-23.1375826,lng:-46.9277214,apt:1386},
+{i:29,n:"Faculdades Padre Anchieta",b:"Vila Vianelo",lat:-23.1937502,lng:-46.8861392,apt:2872},
+{i:30,n:"EMEB Prof. Luiz Biela de Souza",b:"Jardim Santa Gertrudes",lat:-23.2485642,lng:-46.8598817,apt:1629},
+{i:31,n:"EMEB Vereador João Batista Toledo",b:"Jardim Tamoio",lat:-23.1925357,lng:-46.8523484,apt:2130},
+{i:32,n:"EE Prof. Luiz Rivelli",b:"Vila Marlene",lat:-23.1567954,lng:-46.9184097,apt:3817},
+{i:33,n:"Faculdade Escola Superior Ed. Física",b:"Anhangabaú",lat:-23.1937268,lng:-46.8956451,apt:2902},
+{i:34,n:"EE Prof. Orozimbo Sostena",b:"Jardim Estádio",lat:-23.2138176,lng:-46.8679731,apt:3968},
+{i:35,n:"EE Prof.ª Maria de Lourdes de França Silveira",b:"Jardim Pacaembu",lat:-23.1865118,lng:-46.8652234,apt:7689},
+{i:36,n:"EMEB Prof.ª Anna Rita Alves Ludke",b:"Vila Alvorada",lat:-23.1850355,lng:-46.9116001,apt:4380},
+{i:37,n:"ETEC Benedito Storani",b:"Recanto Quarto Centenário",lat:-23.1895315,lng:-46.9434079,apt:4400},
+{i:38,n:"EE Prof. Getúlio Nogueira de Sá",b:"Caxambu",lat:-23.1526515,lng:-46.8521254,apt:4097},
+{i:39,n:"EMEB Prof. José Leme do Prado Filho",b:"Jardim Esplanada",lat:-23.2129729,lng:-46.8705151,apt:3428},
+{i:40,n:"FATEC Deputado Ary Fossen",b:"Centro",lat:-23.1805837,lng:-46.8840819,apt:2572},
+{i:41,n:"EE Conde do Parnaíba",b:"Centro",lat:-23.1852992,lng:-46.8862725,apt:4401},
+{i:42,n:"EMEB Antônio Loureiro",b:"Vila Helena",lat:-23.2100246,lng:-46.8821624,apt:3027},
+{i:43,n:"EMEB Dr. José Romeiro Pereira",b:"Vila Arens II",lat:-23.2039337,lng:-46.8752446,apt:3461},
+{i:44,n:"EMEB Prof.ª Cesarina Fortarel Gonçalves Dias",b:"Vila Jundiainópolis",lat:-23.2131416,lng:-46.8840099,apt:1983},
+{i:45,n:"EE Paulo Mendes Silva",b:"Vila Arens II",lat:-23.203493,lng:-46.8715079,apt:5227},
+{i:46,n:"EMEB Prof.ª Benedita Alzira de Moraes Camunhas",b:"Fazenda Grande",lat:-23.17125455,lng:-46.965158,apt:2838},
+{i:47,n:"EMEB Deputado Ranieri Mazzilli",b:"Vila Esperança",lat:-23.2218535,lng:-46.8553738,apt:2377},
+{i:48,n:"SESI 409",b:"Jardim Brasil",lat:-23.1797633,lng:-46.8991465,apt:3183},
+{i:49,n:"CMEJA Prof. Dr. André Franco Montoro",b:"Vila Argos Velha",lat:-23.1926778,lng:-46.8763634,apt:4788},
+{i:50,n:"Faculdade Anhanguera",b:"Vila das Hortências",lat:-23.1774578,lng:-46.9130868,apt:8420},
+{i:51,n:"EMEB Marcos Gasparian",b:"Centro",lat:-23.1868118,lng:-46.8889687,apt:1891},
+{i:52,n:"Faculdades Padre Anchieta 2",b:"Vila Vianelo",lat:-23.1937473,lng:-46.8860936,apt:2107},
+{i:53,n:"EMEB Aparecida Merino Elias",b:"Medeiros",lat:-23.1773282,lng:-46.99045525,apt:3079},
+{i:54,n:"EE Prof.º José Silva Jr.",b:"Jardim Bandeiras",lat:-23.1551887,lng:-46.8717781,apt:3550},
+{i:55,n:"EMEB Prof.º Oscar Augusto Guelli",b:"Roseira",lat:-23.1434036,lng:-46.8186644,apt:2374},
+{i:56,n:"EMEB Prof. Fábio Rodrigues Mendes",b:"Engordadouro",lat:-23.1509548,lng:-46.9258098,apt:2443},
+{i:57,n:"EE Prof.ª Joceny Villela Curado",b:"Vila Comercial",lat:-23.223784,lng:-46.8844091,apt:4742},
+{i:58,n:"EE Adib Miguel Haddad",b:"Jardim Santa Gertrudes",lat:-23.2483111,lng:-46.8544198,apt:6294},
+{i:59,n:"EMEB Prof.º Flávio D'Angiere",b:"Anhangabaú",lat:-23.1867271,lng:-46.8953595,apt:1390},
+{i:60,n:"EE Dr. Eloy de Miranda Chaves",b:"Jardim Boa Vista",lat:-23.1822746,lng:-46.867948,apt:2774},
+{i:61,n:"EMEB Prof.ª Isabel Christina Marques de Oliveira",b:"Jardim Guanabara",lat:-23.1785812,lng:-46.9251166,apt:3583},
+{i:62,n:"EE Cel. Siqueira de Moraes",b:"Vila Vianelo",lat:-23.1994507,lng:-46.8840478,apt:5901},
+{i:63,n:"EMEB Prof. Patrícia Pires",b:"Parque Centenário",lat:-23.13908218,lng:-46.9158539,apt:2129},
+{i:64,n:"EMEB Prof.º João Luiz de Campos",b:"Jardim Florestal",lat:-23.1640292,lng:-46.8958881,apt:2244},
+{i:65,n:"EMEB Prof.ª Dina Rosete Zandona Cunninghan",b:"Jardim do Lírio",lat:-23.1744023,lng:-46.8507024,apt:2379},
+{i:66,n:"EE Diógenes Duarte Paes",b:"Parque Brasília",lat:-23.1833917,lng:-46.9165147,apt:6357},
+{i:67,n:"EMEB Prof.ª Judith Almeida Curado Arruda",b:"Cidade Nova",lat:-23.191881,lng:-46.8437771,apt:3179},
+{i:68,n:"EMEB Prof.ª Maria Angélica Lourençon",b:"Corrupira",lat:-23.1098104,lng:-46.9192305,apt:1863},
+{i:69,n:"EMEB Luiz Bárbaro",b:"Vila Graff",lat:-23.1857805,lng:-46.8780044,apt:988},
+{i:70,n:"EE Monsenhor Venerando Nalini",b:"Ivoturucaia",lat:-23.1812237,lng:-46.8084188,apt:4759},
+{i:71,n:"EMEB Prof.ª Helena Meirelles Maia Torres",b:"Vila Helena",lat:-23.2098628,lng:-46.8818126,apt:1742},
+{i:72,n:"SENAC Jundiaí",b:"Jardim Paulista",lat:-23.1975931,lng:-46.8955683,apt:4342},
+{i:73,n:"EMEB Rotary Club",b:"Anhangabaú",lat:-23.1974977,lng:-46.891328,apt:2765},
+{i:74,n:"EMEB Prof. Cléo Nogueira Barbosa",b:"Jardim Novo Horizonte",lat:-23.1438957,lng:-46.9940533,apt:2440},
+{i:75,n:"EMEB Geraldo Pinto Duarte Paes",b:"Jardim Ermida II",lat:-23.1895237,lng:-46.9619237,apt:4383},
+{i:76,n:"EE Prof.ª Deolinda Copelli de Souza Lima",b:"Vila Ruy Barbosa",lat:-23.1954153,lng:-46.8598079,apt:5187},
+{i:77,n:"EMEB Prof. Nassib Cury",b:"Fazenda Grande",lat:-23.1714307,lng:-46.9659205,apt:3529},
+{i:78,n:"EMEB Prof. Carlos Foot Guimarães",b:"Jardim Santa Gertrudes",lat:-23.2545171,lng:-46.8594606,apt:2759},
+{i:79,n:"EMEB Aparecido Garcia",b:"Jardim Martins",lat:-23.2317173,lng:-46.883172,apt:3196},
+{i:80,n:"EMEB Prof. Lázaro Miranda Duarte",b:"Vila Nova Jundiainópolis",lat:-23.2167034,lng:-46.8857096,apt:1978},
+{i:81,n:"EE Prof.ª Alessandra Cristina Rodrigues Pezzato",b:"Parque Residencial Jundiaí",lat:-23.14333451,lng:-47.00553746,apt:5248},
+{i:82,n:"EE Jurandyr de Souza Lima",b:"Traviú",lat:-23.1176452,lng:-46.9659196,apt:2072},
+{i:83,n:"EMEB Melânia Fortarel Barbosa",b:"Poste",lat:-23.1344054,lng:-46.9739351,apt:1361},
+{i:84,n:"EMEB Prof. Antônio Adelino Marques da Silva Brandão",b:"Morada das Vinhas",lat:-23.1370744,lng:-46.9287292,apt:5590},
+{i:85,n:"EE Dr. Rafael Mauro",b:"Vila Maringá",lat:-23.2253472,lng:-46.8770892,apt:2367},
+{i:86,n:"EMEB Ver. José Pedro Raymundo",b:"Vila Rio Branco",lat:-23.1746514,lng:-46.8872161,apt:1518},
+{i:87,n:"EMEB Prof.ª Clotilde Mazzali Bollini",b:"Jardim Pacaembu",lat:-23.1881468,lng:-46.8609193,apt:1981},
+{i:88,n:"EE Prof. Francisco Napoleão Maia",b:"Vila Salermo",lat:-23.2164399,lng:-46.8804506,apt:3172},
+{i:89,n:"EMEB Carla Andressa de Oliveira Sinigalia",b:"Vila Hortolândia",lat:-23.1682565,lng:-46.914834,apt:1388},
+{i:90,n:"EMEB Duílio Maziero",b:"Toca",lat:-23.1330096,lng:-46.8281219,apt:1055},
+];
+
+const ALIASES=[
+["divino",5],["divino salvador",5],["barão",7],["barao",7],["anchieta",29],["anchieta 2",52],
+["sesi latorre",25],["sesi 409",48],["sesi",25],["anhanguera",50],["senac",72],["fatec",40],
+["etec",37],["storani",37],["montoro",49],["rotary",73],["gandra",3],["antenor",3],
+["conde",41],["conde parnaiba",41],["maria lourdes",35],["fornari",2],["pupo",8],
+["polenti",10],["curado",13],["ladeira",15],["albertina",17],["benedita arruda",18],
+["marina carvalho",19],["gloria genovese",21],["genovese",21],["maurilio",22],
+["schledorn",24],["facca",27],["fernandes neto",28],["biela",30],["rivelli",32],
+["orozimbo",34],["anna rita",36],["ludke",36],["getulio",38],["leme prado",39],
+["antonio loureiro",42],["romeiro",43],["cesarina",44],["paulo mendes",45],
+["alzira",46],["ranieri",47],["mazzilli",47],["isabel christina",61],
+["siqueira",62],["patricia pires",63],["cunninghan",65],["diogenes",66],
+["judith curado",67],["luiz barbaro",69],["barbaro",69],["nalini",70],
+["helena torres",71],["cleo barbosa",74],["geraldo paes",75],["deolinda",76],
+["copelli",76],["nassib",77],["carlos foot",78],["aparecido garcia",79],
+["lazaro miranda",80],["pezzato",81],["jurandyr",82],["melania",83],
+["adelino",84],["rafael mauro",85],["raymundo",86],["bollini",87],
+["napoleao",88],["sinigalia",89],["carla andressa",89],["maziero",90],
+["centro",41],["vila arens",5],["cecap",22],["caxambu",38],
+["engordadouro",56],["tulipas",19],["ermida",75],["traviu",82],
+["toca",90],["roseira",55],["medeiros",53],["ivoturucaia",70],
+["morada das vinhas",84],["poste",83],
+];
+
+function normBusca(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();}
+function levenshtein(a,b){if(a.length>25||b.length>25)return 99;const m=a.length,n=b.length;const dp=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);for(let j=0;j<=n;j++)dp[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);return dp[m][n];}
+function scoreEscola(query,e){const q=normBusca(query),n=normBusca(e.n),b=normBusca(e.b);if(n===q)return 0;if(n.includes(q))return 1;if(b.includes(q))return 2;const words=q.split(' ').filter(w=>w.length>2);const txt=n+' '+b;const hits=words.filter(w=>txt.includes(w));if(hits.length===words.length)return 3;if(hits.length>0)return 4+(words.length-hits.length);const nw=n.split(' ');const minL=Math.min(...words.map(w=>Math.min(...nw.map(nw2=>levenshtein(w,nw2)))));if(minL<=1)return 6;if(minL<=2)return 7;if(minL<=3)return 8;return 99;}
+function buscarEscola(query,limite=8){if(!query||query.trim().length<2)return ESCOLAS_VOTACAO.slice(0,limite);const q=normBusca(query);const boost={};ALIASES.forEach(([t,i])=>{if(normBusca(t).includes(q)||q.includes(normBusca(t)))boost[i]=-5;});return ESCOLAS_VOTACAO.map(e=>({...e,_s:(boost[e.i]||0)+scoreEscola(query,e)})).filter(e=>e._s<90).sort((a,b)=>a._s-b._s).slice(0,limite);}
+
+let escolaSelecionada=null,af=null,bairroOk=false;
+let R={prioridades:["Saúde","Educação","Segurança Pública","Mobilidade","Limpeza Urbana","Infraestrutura","Emprego e Renda","Meio Ambiente"],escola_idx:null,escola_nome:null,escola_bairro:null,escola_lat:null,escola_lng:null,escola_apt:null};
+
+const LK={"saude":{"t":"Saúde Pública","i":["Postos de saúde / UBS","Pronto-atendimento (PA/UPA)","Tempo de espera por consulta","Qualidade do atendimento médico","Acesso a especialistas e exames"]},"educacao":{"t":"Educação","i":["Creches e educação infantil","Ensino fundamental (escolas)","Infraestrutura das escolas","Qualidade do ensino","Transporte escolar"]},"seguranca":{"t":"Segurança Pública","i":["Policiamento no bairro","Iluminação pública","Sensação de segurança (dia)","Sensação de segurança (noite)","Resposta da GCM/polícia"]},"mobilidade":{"t":"Mobilidade e Transporte","i":["Qualidade do asfalto e ruas","Transporte público (ônibus)","Sinalização de trânsito","Calçadas e acessibilidade","Ciclofaixas"]},"limpeza":{"t":"Limpeza Urbana","i":["Coleta de lixo regular","Coleta seletiva/reciclagem","Limpeza de ruas e calçadas","Manutenção de parques e praças","Controle de bueiros e enchentes"]},"infraestrutura":{"t":"Infraestrutura e Obras","i":["Tapa-buracos e pavimentação","Saneamento (água e esgoto)","Manutenção de áreas públicas","Obras no bairro","Velocidade de resolução de problemas"]}};
+
+const TELAS=[
+  {id:'capa',fn:rCapa},
+  {id:'a',fn:rBlocoA},
+  {id:'b',fn:rBlocoB},
+  {id:'c_saude',fn:()=>rLK('saude')},
+  {id:'c_edu',fn:()=>rLK('educacao')},
+  {id:'c_seg',fn:()=>rLK('seguranca')},
+  {id:'c_mob',fn:()=>rLK('mobilidade')},
+  {id:'c_limp',fn:()=>rLK('limpeza')},
+  {id:'c_infra',fn:()=>rLK('infraestrutura')},
+  {id:'d',fn:rBlocoD},
+  {id:'e',fn:rBlocoE},
+  {id:'final',fn:rFinal},
+];
+let tela=0;
+
+function rBlocoA(){
+  const sel=escolaSelecionada;
+  return `<div class="tela"><div class="bloco-card">
+  <div class="bloco-header"><div class="bloco-letra">A</div><div class="bloco-titulo">Identificação — para ponderar suas respostas</div></div>
+  <div class="bloco-body">
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 1 de 15</div>
+      <div class="pq-txt">Em qual escola você vota?</div>
+      <div class="pq-dica">Digite o nome da escola ou do bairro</div>
+      <div class="escola-input-wrap">
+        <input type="text" id="escola-busca-input" class="escola-input${sel?' ok':''}"
+          placeholder="Ex: Divino Salvador, Conde, Barão, Anhanguera..."
+          value="${sel?sel.n:''}" autocomplete="off" autocorrect="off" spellcheck="false"
+          oninput="onEscolaInput(this.value)" ${sel?'readonly':''}>
+        <div id="escola-resultados-drop" class="escola-resultados" style="display:none"></div>
+      </div>
+      ${sel?`<div class="esc-selecionada">
+        <div class="esc-sel-nome">🏫 ${sel.n}</div>
+        <div class="esc-sel-bairro">📍 ${sel.b}</div>
+        <div class="esc-sel-apt">⚖ ${sel.apt.toLocaleString('pt-BR')} eleitores aptos</div>
+        <button class="btn-trocar-esc" onclick="trocarEscola()">Trocar escola</button>
+      </div>`:''}
+      <div class="ver-todas"><a onclick="verTodasEscolas()">Ver lista completa das 91 escolas</a></div>
+      <div class="ac-hint">Usado apenas para ponderação eleitoral — nenhum dado pessoal armazenado</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 2 de 15</div>
+      <div class="pq-txt">Há quanto tempo você mora em Jundiaí?</div>
+      <div class="opcoes">${ops('tempo',['Menos de 1 ano','De 1 a 5 anos','De 5 a 10 anos','Mais de 10 anos','Nasci aqui'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 3 de 15</div>
+      <div class="pq-txt">Faixa etária?</div>
+      <div class="opcoes">${ops('idade',['16 a 24 anos','25 a 34 anos','35 a 44 anos','45 a 59 anos','60 anos ou mais'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 4 de 15</div>
+      <div class="pq-txt">Gênero?</div>
+      <div class="opcoes">${ops('genero',['Feminino','Masculino','Outro','Prefiro não informar'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 5 de 15</div>
+      <div class="pq-txt">Renda familiar mensal?</div>
+      <div class="opcoes">${ops('renda',['Até 1 SM (até R$ 1.518)','De 1 a 3 SM (até R$ 4.554)','De 3 a 6 SM (até R$ 9.108)','Mais de 6 SM (acima de R$ 9.108)','Prefiro não informar'])}</div>
+    </div>
+    <div class="af-badge">🔐 Antifraude ativo — 1 participação por dispositivo a cada 45 dias</div>
+  </div></div></div>`;
+}
+
+let _debEscola;
+function onEscolaInput(val){clearTimeout(_debEscola);_debEscola=setTimeout(()=>renderEscolaResultados(val),180);}
+
+function renderEscolaResultados(query){
+  const div=document.getElementById('escola-resultados-drop');
+  if(!div)return;
+  if(!query||query.length<2){div.style.display='none';return;}
+  const res=buscarEscola(query,9);
+  if(!res.length){div.innerHTML='<div class="esc-vazio">Nenhuma escola encontrada. Tente o bairro.</div>';div.style.display='block';return;}
+  div.innerHTML=res.map(e=>`<div class="esc-item" onclick="selecionarEscola(${e.i})"><div class="esc-item-nome">${e.n}</div><div class="esc-item-bairro">📍 ${e.b}</div><div class="esc-item-apt">⚖ ${e.apt.toLocaleString('pt-BR')} eleitores aptos</div></div>`).join('');
+  div.style.display='block';
+}
+
+function selecionarEscola(idx){
+  escolaSelecionada=ESCOLAS_VOTACAO[idx];
+  R.escola_idx=escolaSelecionada.i;R.escola_nome=escolaSelecionada.n;
+  R.escola_bairro=escolaSelecionada.b;R.escola_lat=escolaSelecionada.lat;
+  R.escola_lng=escolaSelecionada.lng;R.escola_apt=escolaSelecionada.apt;
+  bairroOk=true;renderT();chk();
+}
+
+function trocarEscola(){
+  escolaSelecionada=null;
+  R.escola_idx=R.escola_nome=R.escola_bairro=R.escola_lat=R.escola_lng=R.escola_apt=null;
+  bairroOk=false;renderT();
+  setTimeout(()=>document.getElementById('escola-busca-input')?.focus(),100);
+}
+
+function verTodasEscolas(){
+  const div=document.getElementById('escola-resultados-drop');
+  if(!div)return;
+  div.innerHTML=ESCOLAS_VOTACAO.map(e=>`<div class="esc-item" onclick="selecionarEscola(${e.i})"><div class="esc-item-nome">${e.n}</div><div class="esc-item-bairro">📍 ${e.b}</div></div>`).join('');
+  div.style.display='block';
+}
+
+function rCapa(){
+  return `<div class="capa tela">
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;">
+      <svg width="40" height="40" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="10" fill="#185FA5"/>
+        <rect x="7" y="22" width="7" height="15" rx="2" fill="#fff"/>
+        <rect x="18" y="16" width="7" height="21" rx="2" fill="#85B7EB"/>
+        <rect x="29" y="9" width="7" height="28" rx="2" fill="#B5D4F4"/>
+        <circle cx="10.5" cy="18" r="2" fill="#fff"/>
+        <circle cx="21.5" cy="12" r="2" fill="#85B7EB"/>
+        <line x1="10.5" y1="18" x2="21.5" y2="12" stroke="#fff" stroke-width="1.2" stroke-dasharray="2.5 2"/>
+      </svg>
+      <div style="text-align:left;">
+        <div style="font-size:22px;font-weight:700;color:#042C53;letter-spacing:-0.5px;line-height:1;">Civiq</div>
+        <div style="font-size:10px;letter-spacing:2px;color:var(--azul-med);">INTELIGÊNCIA EM TEMPO REAL</div>
+      </div>
+    </div>
+
+    <h1 style="font-size:28px;font-weight:700;color:#042C53;line-height:1.25;margin-bottom:10px;">
+      Jundiaí é sua cidade.<br>Sua voz faz diferença.
+    </h1>
+    <p style="font-size:15px;color:var(--cinza-t);line-height:1.7;max-width:480px;margin:0 auto 24px;">
+      Participe da pesquisa de opinião sobre os serviços públicos municipais. Em 5 minutos, você contribui para um diagnóstico científico do seu bairro.
+    </p>
+
+    <div class="chips">
+      <div class="chip">⏱ 5 minutos</div>
+      <div class="chip">🔒 Dados anônimos</div>
+      <div class="chip">📍 Por bairro</div>
+      <div class="chip">📊 Base IBGE 2022</div>
+    </div>
+
+    <div style="background:#E6F1FB;border-radius:14px;padding:18px 20px;text-align:left;margin-top:20px;border-left:4px solid #185FA5;">
+      <div style="font-size:13px;font-weight:600;color:#042C53;margin-bottom:6px;">Como funciona?</div>
+      <div style="font-size:13px;color:#185FA5;line-height:1.7;">
+        Você avalia os serviços do seu bairro — saúde, segurança, transporte e mais. As respostas são ponderadas pela população real de cada região (IBGE 2022) e geram um índice de aprovação científico por bairro.<br><br>
+        <strong>1 participação por dispositivo a cada 45 dias</strong> — sem cadastro, sem identificação pessoal.
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding:14px 16px;background:#fff;border-radius:10px;border:0.5px solid #E2E8F0;display:flex;align-items:center;gap:12px;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2C6.13 2 3 5.13 3 9c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z" fill="#185FA5"/>
+        <circle cx="10" cy="9" r="2.5" fill="#fff"/>
+      </svg>
+      <div style="font-size:12px;color:var(--cinza-t);line-height:1.5;">
+        <strong style="color:#042C53;">Jundiaí SP</strong> · Pesquisa municipal 2025<br>
+        Desenvolvido por <strong style="color:#185FA5;">Civiq</strong> — Inteligência Urbana em Tempo Real
+      </div>
+    </div>
+
+  </div>`;
+}
+function rBlocoB(){
+  return `<div class="tela"><div class="bloco-card">
+  <div class="bloco-header"><div class="bloco-letra">B</div><div class="bloco-titulo">Avaliação Geral da Cidade</div></div>
+  <div class="bloco-body">
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 6 de 15</div>
+      <div class="pq-txt">Como você avalia a qualidade de vida em Jundiaí?</div>
+      <div class="opcoes">${ops('qv',['Muito boa','Boa','Regular','Ruim','Muito ruim'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 7 de 15</div>
+      <div class="pq-txt">Nota para a administração municipal nos últimos 12 meses</div>
+      <div class="pq-dica">0 = Péssima · 10 = Excelente</div>
+      <div class="escala">
+        ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<div class="en ${R.nota==n?'sel':''}" data-v="${n}" onclick="selNota(${n})">${n}</div>`).join('')}
+      </div>
+      <div class="escala-labs"><span>Péssima</span><span>Excelente</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 8 de 15</div>
+      <div class="pq-txt">Principal problema do seu bairro hoje?</div>
+      <div class="pq-dica">Marque apenas um</div>
+      <div class="opcoes">${ops('prob',['Saúde (UBS, atendimento)','Segurança (violência, iluminação)','Mobilidade e transporte','Educação (vagas, qualidade)','Limpeza urbana e lixo','Infraestrutura (asfalto, calçadas)','Emprego e renda','Meio ambiente','Outro'])}</div>
+    </div>
+  </div></div></div>`;
+}
+function rLK(tema){
+  const lk=LK[tema];
+  const letras={saude:'C1',educacao:'C2',seguranca:'C3',mobilidade:'C4',limpeza:'C5',infraestrutura:'C6'};
+  const nums={saude:9,educacao:10,seguranca:11,mobilidade:12,limpeza:13,infraestrutura:14};
+  if(!R['lk_'+tema]) R['lk_'+tema]={};
+  const r=R['lk_'+tema];
+  const OP=['Ótimo','Bom','Regular','Ruim','Péssimo','Não sei'];
+  return `<div class="tela"><div class="bloco-card">
+  <div class="bloco-header"><div class="bloco-letra">${letras[tema]}</div><div class="bloco-titulo">${lk.t}</div></div>
+  <div class="bloco-body">
+    <div class="pq-num">Pergunta ${nums[tema]} de 15</div>
+    <div class="pq-txt" style="margin-bottom:16px">Como você avalia cada serviço?</div>
+    <div class="lk-wrap"><table class="lk-table">
+      <thead><tr><th style="width:38%">Serviço</th>${OP.map(o=>`<th>${o}</th>`).join('')}</tr></thead>
+      <tbody>${lk.i.map(item=>`<tr><td>${item}</td>${OP.map(op=>`<td><div class="lk-r ${r[item]===op?'on':''}"
+        onclick="selLK('${tema}','${item.replace(/'/g,"\\'\'")}','${op}',this)"></div></td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>
+    <p style="font-size:12px;color:var(--cinza-t);margin-top:10px;">Se não usa ou não tem opinião, marque "Não sei"</p>
+  </div></div></div>`;
+}
+function rBlocoD(){
+  const s=R.rec==='Sim, pelo app/site'||R.rec==='Sim, pessoalmente/telefone';
+  return `<div class="tela"><div class="bloco-card">
+  <div class="bloco-header"><div class="bloco-letra">D</div><div class="bloco-titulo">Participação e Canais</div></div>
+  <div class="bloco-body">
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 15 — parte 1</div>
+      <div class="pq-txt">Já tentou registrar uma reclamação à prefeitura?</div>
+      <div class="opcoes">${ops('rec',['Sim, pelo app/site','Sim, pessoalmente/telefone','Não — não sabia como','Não — achei que não adiantaria','Nunca precisei'])}</div>
+      ${s?`<div class="nota-rot">↳ Qual foi o resultado?</div>
+      <div class="opcoes" style="margin-top:10px">${ops('res_rec',['Resolvido rapidamente','Resolvido, mas demorou','Não foi resolvido','Não recebi retorno'])}</div>`:''}
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-num">Pergunta 15 — parte 2</div>
+      <div class=""pq-txt">Canal preferido para informações municipais?</div>
+      <div class="opcoes">${ops('canal',['Redes sociais da prefeitura','Aplicativo municipal','Jornal/rádio/TV local','Grupos de WhatsApp do bairro','Pessoalmente na subprefeitura','Não acompanho'])}</div>
+    </div>
+  </div></div></div>`;
+}
+function rBlocoE(){
+  return `<div class="tela"><div class="bloco-card">
+  <div class="bloco-header"><div class="bloco-letra">E</div><div class="bloco-titulo">Prioridades e Perspectivas</div></div>
+  <div class="bloco-body">
+    <div class="pq-wrap">
+      <div class="pq-num">Quase lá!</div>
+      <div class="pq-txt">Arraste para ordenar: qual área priorizar?</div>
+      <div class="pq-dica">Primeira posição = mais urgente</div>
+      <div class="prio-lista" id="plio">
+        ${R.prioridades.map((a,i)=>`<div class="prio-item" draggable="true" data-a="${a}"
+          ondragstart="dStart(event)" ondragover="dOver(event)" ondrop="dDrop(event)" ondragleave="dLeave(event)">
+          <div class="prio-rank">${i+1}</div>
+          <div class="prio-nome">${a}</div>
+          <div class="prio-drag">⠿</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-txt">Como você vê Jundiaí daqui a 2 anos?</div>
+      <div class="opcoes">${ops('persp',['Muito otimista','Otimista','Neutro','Pessimista','Muito pessimista'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-txt">Indicaria Jundiaí como boa cidade para viver?</div>
+      <div class="opcoes">${ops('rec2',['Com certeza sim','Provavelmente sim','Provavelmente não','Com certeza não'])}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="pq-wrap">
+      <div class="pq-txt">Quer destacar algo? <span style="color:var(--cinza-t);font-size:13px">(opcional)</span></div>
+      <textarea class="campo-area" rows="4" maxlength="500" placeholder="Seu comentário..."
+        oninput="R.coment=this.value;document.getElementById('cnt').textContent=this.value.length+' / 500'"
+      >${R.coment||''}</textarea>
+      <div class="cnt" id="cnt">${(R.coment||'').length} / 500</div>
+    </div>
+  </div></div></div>`;
+}
+function rFinal(){
+  document.getElementById('btn-area').classList.add('hidden');
+  document.getElementById('barra').style.width='100%';
+  document.getElementById('prog-txt').textContent='Concluído!';
+  if(af&&!af.bloqueado) {
+    registrar(af.fp,af.kls,af.kidb);
+    const dados = {
+      meta: {versao:'1.0', municipio:'Jundiaí SP', base:'Censo IBGE 2022', ts: new Date().toISOString()},
+      respostas: {...R}
+    };
+    enviarParaSheets(dados);
+  }
+  return `<div class="tela-final tela">
+  <div class="tf-ico">✓</div>
+  <h2>Obrigado pela sua participação!</h2>
+  <p>Suas respostas contribuem para um diagnóstico real dos serviços públicos de Jundiaí, bairro por bairro.</p>
+  <p style="font-size:13px">Você poderá responder novamente em <strong>45 dias</strong>.</p>
+  <button class="btn-exp" onclick="exportar()">⬇ Baixar minha resposta em JSON</button>
+  <p style="margin-top:20px;font-size:12px;color:var(--cinza-b)">Resultados publicados pela <strong style='color:#185FA5;'>Civiq</strong> de forma agregada e anônima.<br>Base: Censo Demográfico IBGE 2022 — Agregados por Bairros.</p>
+  </div>`;
+}
+function rBloqueio(dias){
+  document.getElementById('btn-area').classList.add('hidden');
+  return `<div class="tela-bloq tela">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;">
+      <svg width="28" height="28" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="10" fill="#185FA5"/>
+        <rect x="7" y="22" width="7" height="15" rx="2" fill="#fff"/>
+        <rect x="18" y="16" width="7" height="21" rx="2" fill="#85B7EB"/>
+        <rect x="29" y="9" width="7" height="28" rx="2" fill="#B5D4F4"/>
+      </svg>
+      <span style="font-size:16px;font-weight:700;color:#042C53;letter-spacing:-0.3px;">Civiq</span>
+    </div>
+    <div class="tb-ico" style="background:#E6F1FB;">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="14" stroke="#185FA5" stroke-width="2" fill="none"/>
+        <path d="M18 10v8l5 3" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2 style="color:#042C53;">Obrigado pela participação!</h2>
+    <p>Você já respondeu essa pesquisa recentemente. Para manter a qualidade dos dados, cada dispositivo pode participar <strong>uma vez a cada 45 dias</strong>.</p>
+    <div class="dias-box" style="background:#E6F1FB;border-color:#185FA5;color:#185FA5;">${dias} dia${dias>1?'s':''} restante${dias>1?'s':''}</div>
+    <p style="font-size:13px;">Sua resposta já está contribuindo para o mapeamento dos serviços públicos de Jundiaí. Compartilhe o link com seus vizinhos!</p>
+    <div style="margin-top:16px;padding:14px;background:#E6F1FB;border-radius:10px;font-size:12px;color:#185FA5;text-align:center;">
+      <strong>datafocus-jundiai.netlify.app</strong><br>
+      <span style="color:#378ADD;">Envie para quem você conhece em Jundiaí</span>
+    </div>
+  </div>`;
+}
+function ops(campo, lista){
+  return lista.map(op=>`<div class="opcao ${R[campo]===op?'sel':''}"
+    onclick="selOp('${campo}','${op.replace(/'/g,"\\'\'")}',this)">
+    <div class="radio"></div><div class="opcao-txt">${op}</div></div>`).join('');
+}
+function selOp(campo,val,el){
+  R[campo]=val;
+  el.closest('.opcoes').querySelectorAll('.opcao').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  if(campo==='rec') renderT(); else chk();
+}
+function selNota(v){
+  R.nota=v;
+  document.querySelectorAll('.en').forEach(el=>el.classList.toggle('sel',parseInt(el.dataset.v)===v));
+  chk();
+}
+function selLK(tema,item,op,el){
+  if(!R['lk_'+tema]) R['lk_'+tema]={};
+  R['lk_'+tema][item]=op;
+  el.closest('tr').querySelectorAll('.lk-r').forEach(r=>r.classList.remove('on'));
+  el.classList.add('on'); chk();
+}
+function dStart(e){dSrc=e.currentTarget;e.currentTarget.classList.add('dragging');}
+function dOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function dLeave(e){e.currentTarget.classList.remove('drag-over');}
+function dDrop(e){
+  e.preventDefault(); const t=e.currentTarget; t.classList.remove('drag-over');
+  if(dSrc&&dSrc!==t){
+    const l=document.getElementById('plio'), its=[...l.children];
+    const si=its.indexOf(dSrc), ti=its.indexOf(t);
+    if(si<ti) l.insertBefore(dSrc,t.nextSibling); else l.insertBefore(dSrc,t);
+    [...l.children].forEach((el,i)=>el.querySelector('.prio-rank').textContent=i+1);
+    R.prioridades=[...l.children].map(el=>el.dataset.a);
+  }
+  dSrc&&dSrc.classList.remove('dragging');
+}
+
+function valida(){
+  const id=TELAS[tela].id;
+  if(id==='a'){
+    if(!escolaSelecionada){
+      const inp=document.getElementById('escola-busca-input');
+      if(inp){inp.style.borderColor='var(--vermelho)';inp.focus();}
+      return false;
+    }
+    return !!(R.tempo&&R.idade&&R.genero&&R.renda);
+  }
+  if(id==='b')return !!(R.qv&&R.nota_geral!=null&&R.problema_principal);
+  if(id.startsWith('c_')){
+    const lk=id.replace('c_','');
+    const mapa={edu:'educacao',seg:'seguranca',mob:'mobilidade',limp:'limpeza',infra:'infraestrutura'};
+    const chave=mapa[lk]||lk;
+    if(!LK[chave])return true;
+    return LK[chave].i.every((_,idx)=>R['lk_'+chave+'_'+idx]!=null||true);
+  }
+  if(id==='d')return !!(R.reclamou!=null&&R.canal);
+  if(id==='e')return !!(R.futuro&&R.recomenda!=null);
+  return true;
+}
+
+function chk(){const b=document.getElementById('btn-a');if(b)b.disabled=!valida();}
+function prog(){
+  const tot=TELAS.length-1, pct=Math.round((Math.min(tela,tot)/tot)*100);
+  document.getElementById('barra').style.width=pct+'%';
+  document.getElementById('prog-txt').textContent=tela===0?'':pct+'% concluído';
+  const bv=document.getElementById('btn-v'); if(bv)bv.style.visibility=tela===0?'hidden':'visible';
+  const ba=document.getElementById('btn-a');
+  if(ba){
+    if(TELAS[tela].id==='e'){ba.textContent='Enviar pesquisa ✓';ba.className='btn btn-e';}
+    else{ba.innerHTML='Continuar →';ba.className='btn btn-a';}
+  }
+  const ba2=document.getElementById('btn-area');
+  if(ba2) ba2.classList.toggle('hidden',TELAS[tela].id==='final');
+}
+function renderT(){
+  if(af&&af.bloqueado&&tela===0){document.getElementById('app').innerHTML=rBloqueio(af.diasR);return;}
+  document.getElementById('app').innerHTML=TELAS[tela].fn();
+  prog(); chk();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(TELAS[tela].id==='a'&&R.bairro) bairroOk=true;
+}
+function avancar(){if(!valida())return;if(tela<TELAS.length-1){tela++;renderT();}}
+function voltar(){if(tela>0){tela--;renderT();}}
+function fingerprint() {
+  const n = navigator, s = screen;
+  const raw = [n.language,n.platform,n.hardwareConcurrency,n.maxTouchPoints,
+    s.colorDepth,s.width+'x'+s.height,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    new Date().getTimezoneOffset(),
+    n.userAgent.slice(0,80)].join('|');
+  let h = 5381;
+  for (let i=0;i<raw.length;i++){h=((h<<5)+h)+raw.charCodeAt(i);h=h&h;}
+  return 'fp'+Math.abs(h).toString(36);
+}
+function idbOp(mode, key, val) {
+  return new Promise(res => {
+    try {
+      const r = indexedDB.open('pqj_af',1);
+      r.onupgradeneeded = e => e.target.result.createObjectStore('d');
+      r.onsuccess = e => {
+        const db = e.target.result;
+        const tx = db.transaction('d', mode);
+        const st = tx.objectStore('d');
+        const req = mode==='readwrite' ? st.put(val,key) : st.get(key);
+        req.onsuccess = () => res(req.result||null);
+        req.onerror = () => res(null);
+      };
+      r.onerror = () => res(null);
+    } catch { res(null); }
+  });
+}
+async function checkBloqueio() {
+  const fp = fingerprint();
+  const kls = VER+'_'+fp, kidb = VER+'_idb_'+fp;
+  let rls=null, ridb=null;
+  try { rls = JSON.parse(localStorage.getItem(kls)); } catch {}
+  ridb = await idbOp('readonly', kidb);
+  const lista = [rls,ridb].filter(Boolean);
+  if (!lista.length) return {bloqueado:false, fp, kls, kidb};
+  const rec = lista.reduce((a,b)=>a.ts>b.ts?a:b);
+  const dias = (Date.now()-rec.ts)/(86400000);
+  if (dias < DIAS) return {bloqueado:true, diasR: Math.ceil(DIAS-dias)};
+  return {bloqueado:false, fp, kls, kidb};
+}
+async function registrar(fp, kls, kidb) {
+  const d = {ts:Date.now(), fp, ver:'1.0'};
+  try { localStorage.setItem(kls, JSON.stringify(d)); } catch {}
+  await idbOp('readwrite', kidb, d);
+}
+async function enviarParaSheets(dados) {
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+    return true;
+  } catch(err) {
+    console.warn('Erro ao enviar:', err);
+    return false;
+  }
+}
+function exportar(){
+  const d={meta:{versao:'1.0',municipio:'Jundiaí SP',base:'Censo IBGE 2022',ts:new Date().toISOString()},respostas:{...R}};
+  const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+  a.download='pesquisa_jundiai_'+Date.now()+'.json'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// Stubs compatibilidade (não mais usados mas referenciados)
+function _confirmarBairro(){}
+function _abrirListaBairros(){}
+function limBairro(){}
+function onCepInput(){}
+
+(async()=>{af=await checkBloqueio();renderT();})();
+</script>
+</body>
+</html>
