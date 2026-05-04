@@ -15,8 +15,7 @@ body::before { content: ""; position: fixed; top: -120px; right: -120px; width: 
 .header-inner { max-width: 720px; margin: 0px auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
 .header-title { font-family: var(--fonte-h); font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.9); letter-spacing: 0.5px; }
 .header-prog { font-family: var(--fonte-h); font-size: 12px; color: rgba(255, 255, 255, 0.65); }
-.barra-wrap { position: fixed; top: 56px; left: 0px; right: 0px; height: 4px; background: rgba(255, 255, 255, 0.15); z-index: 100; }
-.barra-fill { height: 100%; background: linear-gradient(90deg, rgb(91, 184, 255), rgb(56, 232, 181)); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
+/* barra-wrap e barra-fill agora definidos na seção PROGRESS BAR STICKY abaixo */
 .container { max-width: 720px; margin: 0px auto; padding: 80px 20px 100px; position: relative; z-index: 1; }
 .capa { text-align: center; padding: 40px 0px 20px; }
 .capa-badge { display: inline-block; background: var(--azul-light); color: var(--azul-med); font-family: var(--fonte-h); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 24px; }
@@ -155,6 +154,40 @@ body::before { content: ""; position: fixed; top: -120px; right: -120px; width: 
 .esc-vazio{padding:16px;font-size:13px;color:var(--cinza-t);text-align:center;}
 .ver-todas{text-align:center;margin-top:10px;font-size:13px;}
 .ver-todas a{color:var(--azul-med);text-decoration:underline;cursor:pointer;}
+
+/* ── NAVIGATION BUTTONS ── */
+.btn-area{display:flex;gap:12px;margin-top:20px;padding-bottom:8px;}
+.btn{cursor:pointer;border-radius:var(--raio-sm);transition:all .18s;font-family:var(--fonte-b);}
+.btn-v{flex:0 0 auto;padding:14px 20px;border:1.5px solid var(--cinza-b);background:none;font-size:14px;color:var(--cinza-t);}
+.btn-v:hover{border-color:var(--azul-med);color:var(--azul);}
+.btn-a{flex:1;padding:16px;border:none;background:var(--azul-med);color:#fff;font-family:var(--fonte-h);font-size:15px;font-weight:600;}
+.btn-a:hover:not(:disabled){background:var(--azul);transform:translateY(-1px);}
+.btn-a:disabled{background:var(--cinza-b);cursor:default;transform:none;}
+.btn-e{flex:1;padding:16px;border:none;background:var(--verde);color:#fff;font-family:var(--fonte-h);font-size:15px;font-weight:600;}
+.btn-e:hover{background:#0a6840;transform:translateY(-1px);}
+
+/* ── PROGRESS BAR STICKY (abaixo do header) ── */
+.progress-bar{position:fixed;top:56px;left:0;right:0;z-index:99;background:rgba(8,22,55,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.07);}
+.progress-inner{max-width:720px;margin:0 auto;padding:6px 24px;display:flex;align-items:center;gap:12px;}
+.prog-txt{font-size:10px;font-family:var(--fonte-h);font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.5px;white-space:nowrap;flex-shrink:0;min-width:80px;}
+.barra-wrap{flex:1;height:3px;background:rgba(255,255,255,.12);border-radius:100px;}
+#barra{height:100%;background:linear-gradient(90deg,#5BB8FF,#38E8B5);border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;}
+/* Compensar header(56px) + progress bar(27px) */
+.container{padding-top:100px!important;}
+
+/* ── LIKERT COLUMN COLORS ── */
+.lk-th-otimo{color:#0E7C4A!important;}
+.lk-th-bom{color:#1B5FA8!important;}
+.lk-th-regular{color:#64748B!important;}
+.lk-th-ruim{color:#E06320!important;}
+.lk-th-pessimo{color:#C0392B!important;}
+.lk-th-naosei{color:#94a3b8!important;}
+
+/* ── PRIORITIES ARROWS (mobile) ── */
+.prio-btns{display:flex;flex-direction:column;gap:2px;margin-left:auto;}
+.prio-btn{background:none;border:1px solid var(--cinza-b);border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:11px;color:var(--cinza-t);display:flex;align-items:center;justify-content:center;padding:0;line-height:1;transition:.15s;}
+.prio-btn:hover:not(:disabled){border-color:var(--azul-med);color:var(--azul);}
+.prio-btn:disabled{opacity:.3;cursor:default;}
 </style>
 </head>
 <body>
@@ -402,7 +435,6 @@ function rBlocoA(){
       <div class="pq-txt">Renda familiar mensal?</div>
       <div class="opcoes">${ops('renda',['Até 1 SM (até R$ 1.518)','De 1 a 3 SM (até R$ 4.554)','De 3 a 6 SM (até R$ 9.108)','Mais de 6 SM (acima de R$ 9.108)','Prefiro não informar'])}</div>
     </div>
-    <div class="af-badge">🔐 Antifraude ativo — 1 participação por dispositivo a cada 45 dias</div>
   </div></div></div>`;
 }
 
@@ -482,7 +514,11 @@ function rCapa(){
       </div>
     </div>
 
-    <div style="margin-top:20px;padding:14px 16px;background:#fff;border-radius:10px;border:0.5px solid #E2E8F0;display:flex;align-items:center;gap:12px;">
+    <div style="margin-top:12px;padding:9px 14px;background:var(--cinza-f);border:1px solid var(--cinza-b);border-radius:8px;font-size:11px;color:var(--cinza-t);text-align:center;">
+      🔐 <strong style="color:var(--texto);">Antifraude ativo</strong> — 1 participação por dispositivo a cada 45 dias
+    </div>
+
+    <div style="margin-top:12px;padding:14px 16px;background:#fff;border-radius:10px;border:0.5px solid #E2E8F0;display:flex;align-items:center;gap:12px;">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path d="M10 2C6.13 2 3 5.13 3 9c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z" fill="#185FA5"/>
         <circle cx="10" cy="9" r="2.5" fill="#fff"/>
@@ -530,13 +566,14 @@ function rLK(tema){
   if(!R['lk_'+tema]) R['lk_'+tema]={};
   const r=R['lk_'+tema];
   const OP=['Ótimo','Bom','Regular','Ruim','Péssimo','Não sei'];
+  const OP_CLS=['lk-th-otimo','lk-th-bom','lk-th-regular','lk-th-ruim','lk-th-pessimo','lk-th-naosei'];
   return `<div class="tela"><div class="bloco-card">
   <div class="bloco-header"><div class="bloco-letra">${letras[tema]}</div><div class="bloco-titulo">${lk.t}</div></div>
   <div class="bloco-body">
     <div class="pq-num">Pergunta ${nums[tema]} de 15</div>
     <div class="pq-txt" style="margin-bottom:16px">Como você avalia cada serviço?</div>
     <div class="lk-wrap"><table class="lk-table">
-      <thead><tr><th style="width:38%">Serviço</th>${OP.map(o=>`<th>${o}</th>`).join('')}</tr></thead>
+      <thead><tr><th style="width:38%">Serviço</th>${OP.map((o,i)=>`<th class="${OP_CLS[i]}">${o}</th>`).join('')}</tr></thead>
       <tbody>${lk.i.map(item=>`<tr><td>${item}</td>${OP.map(op=>`<td><div class="lk-r ${r[item]===op?'on':''}"
         onclick="selLK('${tema}','${item.replace(/'/g,"\\'\'")}','${op}',this)"></div></td>`).join('')}</tr>`).join('')}</tbody>
     </table></div>
@@ -576,6 +613,10 @@ function rBlocoE(){
           ondragstart="dStart(event)" ondragover="dOver(event)" ondrop="dDrop(event)" ondragleave="dLeave(event)">
           <div class="prio-rank">${i+1}</div>
           <div class="prio-nome">${a}</div>
+          <div class="prio-btns">
+            <button class="prio-btn" onclick="moverPrio(${i},-1)" ${i===0?'disabled':''}>↑</button>
+            <button class="prio-btn" onclick="moverPrio(${i},1)" ${i===R.prioridades.length-1?'disabled':''}>↓</button>
+          </div>
           <div class="prio-drag">⠿</div></div>`).join('')}
       </div>
     </div>
@@ -643,7 +684,7 @@ function rBloqueio(dias){
     <div class="dias-box" style="background:#E6F1FB;border-color:#185FA5;color:#185FA5;">${dias} dia${dias>1?'s':''} restante${dias>1?'s':''}</div>
     <p style="font-size:13px;">Sua resposta já está contribuindo para o mapeamento dos serviços públicos de Jundiaí. Compartilhe o link com seus vizinhos!</p>
     <div style="margin-top:16px;padding:14px;background:#E6F1FB;border-radius:10px;font-size:12px;color:#185FA5;text-align:center;">
-      <strong>datafocus-jundiai.netlify.app</strong><br>
+      <strong>civiq-br.github.io/civiq-jundiai</strong><br>
       <span style="color:#378ADD;">Envie para quem você conhece em Jundiaí</span>
     </div>
   </div>`;
@@ -670,6 +711,12 @@ function selLK(tema,item,op,el){
   el.closest('tr').querySelectorAll('.lk-r').forEach(r=>r.classList.remove('on'));
   el.classList.add('on'); chk();
 }
+function moverPrio(idx,dir){
+  const ni=idx+dir;
+  if(ni<0||ni>=R.prioridades.length)return;
+  [R.prioridades[idx],R.prioridades[ni]]=[R.prioridades[ni],R.prioridades[idx]];
+  renderT();
+}
 function dStart(e){dSrc=e.currentTarget;e.currentTarget.classList.add('dragging');}
 function dOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
 function dLeave(e){e.currentTarget.classList.remove('drag-over');}
@@ -688,11 +735,7 @@ function dDrop(e){
 function valida(){
   const id=TELAS[tela].id;
   if(id==='a'){
-    if(!escolaSelecionada){
-      const inp=document.getElementById('escola-busca-input');
-      if(inp){inp.style.borderColor='var(--vermelho)';inp.focus();}
-      return false;
-    }
+    if(!escolaSelecionada) return false;
     return !!(R.tempo&&R.idade&&R.genero&&R.renda);
   }
   if(id==='b')return !!(R.qv&&R.nota_geral!=null&&R.problema_principal);
@@ -706,6 +749,14 @@ function valida(){
   if(id==='d')return !!(R.reclamou!=null&&R.canal);
   if(id==='e')return !!(R.futuro&&R.recomenda!=null);
   return true;
+}
+// Separa efeitos visuais de erro da lógica de validação pura
+function showErrors(){
+  const id=TELAS[tela].id;
+  if(id==='a'&&!escolaSelecionada){
+    const inp=document.getElementById('escola-busca-input');
+    if(inp){inp.style.borderColor='var(--vermelho)';inp.focus();}
+  }
 }
 
 function chk(){const b=document.getElementById('btn-a');if(b)b.disabled=!valida();}
@@ -729,7 +780,7 @@ function renderT(){
   window.scrollTo({top:0,behavior:'smooth'});
   if(TELAS[tela].id==='a'&&R.bairro) bairroOk=true;
 }
-function avancar(){if(!valida())return;if(tela<TELAS.length-1){tela++;renderT();}}
+function avancar(){if(!valida()){showErrors();return;}if(tela<TELAS.length-1){tela++;renderT();}}
 function voltar(){if(tela>0){tela--;renderT();}}
 function fingerprint() {
   const n = navigator, s = screen;
